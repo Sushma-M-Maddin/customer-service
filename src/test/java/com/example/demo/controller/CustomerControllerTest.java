@@ -127,8 +127,33 @@ assertThat(result.getAccountNo())
 /*
 List Customers Test (Admin)
 */
+@Test
+public void testListCustomers(){
 
+CustomerResponseDTO dto =
+new CustomerResponseDTO();
 
+dto.setUsername("admin");
+
+when(service.getAllCustomers())
+.thenReturn(java.util.Arrays.asList(dto));
+
+Authentication auth =
+Mockito.mock(Authentication.class);
+
+/* Cast directly inside Mockito */
+when(auth.getAuthorities())
+.thenAnswer(invocation ->
+(java.util.Collection)
+java.util.Collections.singletonList(
+new org.springframework.security.core.authority.SimpleGrantedAuthority("ADMIN")
+));
+
+assertThat(
+controller.getAllCustomers(auth).size())
+.isEqualTo(1);
+
+}
 /*
 Delete Customer Test (Admin)
 */
