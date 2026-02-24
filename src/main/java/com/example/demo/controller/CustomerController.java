@@ -28,6 +28,15 @@ public class CustomerController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    /* Constructor for Unit Testing */
+    public CustomerController(
+    CustomerService service,
+    JwtUtil jwtUtil){
+
+    this.service = service;
+    this.jwtUtil = jwtUtil;
+    }
 
 
     /*
