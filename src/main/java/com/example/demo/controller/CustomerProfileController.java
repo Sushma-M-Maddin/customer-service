@@ -21,11 +21,6 @@ public class CustomerProfileController {
     @Autowired
     private CustomerService customerService;
 
-
-
-    /*
-     * Create Profile
-     */
     @PostMapping("/create")
     public CustomerProfile createProfile(
 
@@ -33,21 +28,13 @@ public class CustomerProfileController {
 
             @Valid
             @RequestBody CustomerProfileRequestDTO dto) {
-
-
         String username =
                 auth.getName();
-
-
         Long accountNo =
                 customerService
                 .getCustomerByUsernameDTO(username)
                 .getAccountNo();
 
-
-        /*
-         * Convert DTO → Entity
-         */
         CustomerProfile profile =
                 new CustomerProfile();
 
@@ -63,12 +50,6 @@ public class CustomerProfileController {
                 .createProfile(accountNo, profile);
 
     }
-
-
-
-    /*
-     * Get Own Profile
-     */
     @GetMapping("/my")
     public CustomerProfile getProfile(
 
@@ -90,19 +71,10 @@ public class CustomerProfileController {
 
     }
 
-
-
-    /*
-     * PAN Lookup (Admin / Loan Service)
-     */
     @GetMapping("/pan/{pan}")
     public CustomerProfile getByPan(
-
             @PathVariable String pan,
-
             Authentication auth) {
-
-
         boolean isAdmin =
 
                 auth.getAuthorities()
@@ -110,18 +82,13 @@ public class CustomerProfileController {
                 .anyMatch(a ->
                 a.getAuthority()
                 .equals("ADMIN"));
-
-
         if(!isAdmin){
 
             throw new RuntimeException(
                     "Admin Access Required");
         }
-
-
         return profileService
                 .getByPan(pan);
 
     }
-
 }

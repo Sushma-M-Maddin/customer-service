@@ -5,24 +5,27 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import com.example.demo.enums.IfscCode;
+
+/*
+ * CustomerProfile Entity
+ * ----------------------
+ * Stores KYC and Loan Eligibility Details.
+ * Primary Key = accountNo
+ * accountNo is also Foreign Key to Customer table.
+ */
+
 @Entity
 @Table(name="customer_profile")
 @Data
 public class CustomerProfile {
 
-    /*
-     * Primary Key = Account Number
-     * Also Foreign Key
-     */
+
     @Id
     @Column(name="account_no")
     private Long accountNo;
 
 
-    /*
-     * One Customer → One Profile
-     * Shared Primary Key
-     */
     @OneToOne
     @MapsId
     @JoinColumn(name="account_no")
@@ -32,13 +35,20 @@ public class CustomerProfile {
     @Column(unique=true,nullable=false)
     private String pan;
 
+
     private LocalDate dob;
+
 
     private String address;
 
-    private String ifsc;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private IfscCode ifsc;
+
 
     private Double annualIncome;
+
 
     private String occupation;
 
