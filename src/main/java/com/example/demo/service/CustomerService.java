@@ -29,6 +29,9 @@ public class CustomerService {
 				@Autowired
 				private BCryptPasswordEncoder encoder;
 				
+				@Autowired
+				EmailService emailService;
+				
 				
 				/*
 				Register Customer
@@ -82,9 +85,16 @@ public class CustomerService {
 				Customer saved=
 				repository.save(customer);
 				
+				 emailService.sendRegistrationMail(
+			                saved.getEmail(),
+			                saved.getAccountNo()
+			        );
+
+				
 				return convertToDTO(saved);
 				
 				}
+			
 				
 				/*
 				Login Customer
