@@ -13,14 +13,11 @@ import com.example.demo.entity.Customer;
 import com.example.demo.jwt.JwtUtil;
 import com.example.demo.service.CustomerService;
 
-/*
- * CustomerController
- * ------------------
- * Fully secured REST APIs.
- */
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/customer")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
     @Autowired
@@ -28,23 +25,23 @@ public class CustomerController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    public CustomerController(
+    CustomerService service,
+    JwtUtil jwtUtil){
 
+    this.service = service;
+    this.jwtUtil = jwtUtil;
+    }
 
-    /*
-     * Register Customer
-     */
     @PostMapping("/register")
     public CustomerResponseDTO registerCustomer(
+    		@Valid
             @RequestBody CustomerRequestDTO dto){
 
         return service.registerCustomer(dto);
     }
 
-
-
-    /*
-     * Login Customer
-     */
     @PostMapping("/login")
     public String loginCustomer(
             @RequestBody LoginDTO dto){
@@ -58,12 +55,6 @@ public class CustomerController {
                 c.getRole());
     }
 
-
-
-    /*
-     * Get Own Profile
-     * Most Secure API
-     */
     @GetMapping("/profile")
     public CustomerResponseDTO getProfile(
             Authentication auth){
@@ -73,12 +64,6 @@ public class CustomerController {
         return service.getCustomerByUsernameDTO(username);
     }
 
-
-
-    /*
-     * Get Customer By ID
-     * Ownership Validation
-     */
     @GetMapping("/{id}")
     public CustomerResponseDTO getCustomerById(
             @PathVariable Long id,
@@ -99,12 +84,6 @@ public class CustomerController {
         return dto;
     }
 
-
-
-    /*
-     * List Customers
-     * Only for Admin Later
-     */
     @GetMapping("/list")
     public List<CustomerResponseDTO>
     getAllCustomers(Authentication auth){
@@ -126,14 +105,14 @@ public class CustomerController {
     return service.getAllCustomers();
 
     }
-
-
     /*
      * Update Own Account
+     * Only the logged-in customer can update their own data
      */
     @PutMapping("/update/{id}")
     public CustomerResponseDTO updateCustomer(
 
+            @Valid
             @RequestBody CustomerRequestDTO dto,
 
             @PathVariable Long id,
@@ -145,6 +124,7 @@ public class CustomerController {
         CustomerResponseDTO existing =
                 service.getCustomerById(id);
 
+        // Ownership validation
         if(!existing.getUsername()
                 .equals(username)){
 
@@ -154,12 +134,6 @@ public class CustomerController {
 
         return service.updateCustomer(dto,id);
     }
-
-
-
-    /*
-     * Delete Own Account
-     */
     @DeleteMapping("/delete/{id}")
     public String deleteCustomer(
 

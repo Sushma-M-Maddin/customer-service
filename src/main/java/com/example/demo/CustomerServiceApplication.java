@@ -4,21 +4,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-
-/*
- * Customer Service Main Class
- * Registers service with Eureka
- */
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 public class CustomerServiceApplication {
-
- public static void main(String[] args) {
-
-  SpringApplication.run(
-  CustomerServiceApplication.class, args);
-
- }
-
+	
+	 public static void main(String[] args) {
+		 
+	  SpringApplication.run(
+	  CustomerServiceApplication.class, args);
+	
+	  	}
 }
