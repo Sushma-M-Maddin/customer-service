@@ -103,6 +103,42 @@ public class CustomerProfileService {
         return profile;
 
     }
+    public CustomerProfile updateProfile(
+
+            Long accountNo,
+
+            CustomerProfile updatedProfile){
+
+        CustomerProfile existing =
+                profileRepository.findByAccountNo(accountNo);
+
+        if(existing==null){
+
+            throw new RuntimeException(
+                    "Profile Not Found");
+        }
+
+        existing.setPan(
+                updatedProfile.getPan());
+
+        existing.setDob(
+                updatedProfile.getDob());
+
+        existing.setAddress(
+                updatedProfile.getAddress());
+
+        existing.setIfsc(
+                updatedProfile.getIfsc());
+
+        existing.setAnnualIncome(
+                updatedProfile.getAnnualIncome());
+
+        existing.setOccupation(
+                updatedProfile.getOccupation());
+
+        return profileRepository.save(existing);
+
+    }
 
     public CustomerProfile getByPan(
 

@@ -71,6 +71,40 @@ public class CustomerProfileController {
                 .getProfile(accountNo);
 
     }
+    /*
+     * Update Profile
+     * Customer can update own profile
+     */
+    @PutMapping("/update")
+    public CustomerProfile updateProfile(
+
+            Authentication auth,
+
+            @Valid
+            @RequestBody CustomerProfileRequestDTO dto){
+
+        String username =
+                auth.getName();
+
+        Long accountNo =
+                customerService
+                .getCustomerByUsernameDTO(username)
+                .getAccountNo();
+
+        CustomerProfile profile =
+                new CustomerProfile();
+
+        profile.setPan(dto.getPan());
+        profile.setDob(dto.getDob());
+        profile.setAddress(dto.getAddress());
+        profile.setIfsc(dto.getIfsc());
+        profile.setAnnualIncome(dto.getAnnualIncome());
+        profile.setOccupation(dto.getOccupation());
+
+        return profileService
+                .updateProfile(accountNo, profile);
+
+    }
 
     @GetMapping("/pan/{pan}")
     public CustomerProfile getByPan(
