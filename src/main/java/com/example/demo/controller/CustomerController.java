@@ -92,13 +92,6 @@ public class CustomerController {
     @GetMapping("/list")
     public List<CustomerResponseDTO> getAllCustomers(Authentication auth) {
 
-    	// DEBUG START
-    	System.out.println("Authorities in Controller: " + auth.getAuthorities());
-    	auth.getAuthorities().forEach(a -> 
-    	    System.out.println("Authority value: " + a.getAuthority())
-    	);
-    	// DEBUG END
-
         boolean isAdmin =
 
                 auth.getAuthorities()
