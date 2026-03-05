@@ -25,15 +25,11 @@ public class SecurityConfig {
     @Autowired
     JwtFilter jwtFilter;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
 
         http
-
-            .cors() // ENABLE CORS
-            .and()
 
             .csrf(csrf -> csrf.disable())
 
@@ -48,10 +44,6 @@ public class SecurityConfig {
                         "/customer/register")
                 .permitAll()
 
-                .requestMatchers(
-                        "OPTIONS","/**")
-                .permitAll()
-
                 .anyRequest()
                 .authenticated()
 
@@ -63,45 +55,6 @@ public class SecurityConfig {
             );
 
         return http.build();
-    }
-
-
-
-    /*
-     CORS Configuration
-     Allows Angular (localhost:4200)
-    */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-
-        CorsConfiguration configuration =
-                new CorsConfiguration();
-
-        configuration.setAllowedOrigins(
-                List.of("http://localhost:4200"));
-
-        configuration.setAllowedMethods(
-                List.of(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "DELETE",
-                        "OPTIONS"
-                ));
-
-        configuration.setAllowedHeaders(
-                List.of("*"));
-
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration(
-                "/**",
-                configuration);
-
-        return source;
     }
 
 }

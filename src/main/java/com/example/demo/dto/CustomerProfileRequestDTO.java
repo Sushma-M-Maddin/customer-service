@@ -20,18 +20,12 @@ public class CustomerProfileRequestDTO {
     )
     private String pan;
 
-
     @NotNull(message="Date of Birth is required")
     private LocalDate dob;
-
 
     @NotBlank(message="Address is required")
     private String address;
 
-
-    /*
-     * IFSC Dropdown Value
-     */
     @NotNull(message="IFSC Code is required")
     private IfscCode ifsc;
 

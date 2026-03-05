@@ -1,3 +1,4 @@
+
 package com.example.demo.jwt;
 
 import java.security.Key;
@@ -10,99 +11,78 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-/*
- * JWT Utility Class
- */
-
 @Component
 public class JwtUtil {
 
-    private static final String SECRET =
-            "myfinmyfinmyfinmyfinmyfinmyfin12";
+    private static final String SECRET = "myfinmyfinmyfinmyfinmyfinmyfin12";
 
-    private Key key =
-            Keys.hmacShaKeyFor(SECRET.getBytes());
-
-
-    // Generate Token
+    private Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(
-    		String username,
-    		String role){
+            Long accountNo,
+            String role) {
 
-    		return Jwts.builder()
+        return Jwts.builder()
 
-    		.setSubject(username)
+                // Subject = accountNo
+                .setSubject(String.valueOf(accountNo))
 
-    		.claim("role", role)
+                .claim("role", role)
 
-    		.setIssuedAt(new Date())
+                .setIssuedAt(new Date())
 
-    		.setExpiration(
-    		new Date(System.currentTimeMillis()+86400000))
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 86400000))
 
-    		.signWith(key,
-    		SignatureAlgorithm.HS256)
+                .signWith(key,
+                        SignatureAlgorithm.HS256)
 
-    		.compact();
-    		}
+                .compact();
+    }
 
-
-    // Extract Username
-
-    public String extractUsername(String token){
-
+    public String extractSubject(String token) {
         return getClaims(token).getSubject();
     }
 
+    public Long extractAccountNo(String token) {
+        try {
+            return Long.parseLong(extractSubject(token));
+        } catch (NumberFormatException e) {
+            return null; // Return null if subject is not a numeric account number
+        }
+    }
 
-    // Validate Token
+    public String extractRole(String token) {
 
-    public boolean validateToken(String token){
+        return getClaims(token)
+                .get("role", String.class);
+    }
 
-        try{
+    public boolean validateToken(String token) {
+
+        try {
 
             getClaims(token);
 
             return true;
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             return false;
         }
     }
 
-
-    // Get Claims
-
-    private Claims getClaims(String token){
+    private Claims getClaims(String token) {
 
         return Jwts.parserBuilder()
 
-        .setSigningKey(key)
+                .setSigningKey(key)
 
-        .build()
+                .build()
 
-        .parseClaimsJws(token)
+                .parseClaimsJws(token)
 
-        .getBody();
+                .getBody();
     }
-
-
-    public String extractRole(String token){
-
-    	return Jwts.parserBuilder()
-
-    	.setSigningKey(key)
-
-    	.build()
-
-    	.parseClaimsJws(token)
-
-    	.getBody()
-
-    	.get("role",String.class);
-
-    	}
 
 }

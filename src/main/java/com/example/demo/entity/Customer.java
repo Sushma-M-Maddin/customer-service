@@ -36,10 +36,6 @@ public class Customer {
 
     private LocalDate createdDate;
 
-
-    /*
-     * Generate FinBank Account Number
-     */
     @PrePersist
     public void generateAccountNumber(){
 

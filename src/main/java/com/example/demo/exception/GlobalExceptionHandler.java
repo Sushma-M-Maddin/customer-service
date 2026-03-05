@@ -74,6 +74,21 @@ public class GlobalExceptionHandler {
 	HttpStatus.CONFLICT);
 	
 	}
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<String> handleInvalidPassword(InvalidPasswordException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AdminAccessRequiredException.class)
+    public ResponseEntity<String> handleAdminAccessRequired(AdminAccessRequiredException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<String> handleUnauthorizedAccess(UnauthorizedAccessException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
 	
 	@ExceptionHandler(Exception.class)
 	
